@@ -1,0 +1,53 @@
+#include "main.h"
+
+#include "DHT.h" // Додайте бібліотеку DHT
+#include "scheduler.h"
+#include "stdio.h"
+#include "stdlib.h"
+
+#include "LCD.h" // Додайте бібліотеку для LCD
+
+#define DHTPIN 2 // Вкажіть пін, на якому підключено DHT22
+
+DHT dht(DHTPIN, DHT22); // Ініціалізуйте об'єкт DHT
+
+/* Решта коду залишається незмінною */
+
+void output_LCD() {
+    char temperature_str[20];
+    char humidity_str[20];
+
+    // Отримайте значення температури та вологості
+    float temperature = dht.readTemperature();
+    float humidity = dht.readHumidity();
+
+    // Форматування рядка для відображення на LCD
+    sprintf(temperature_str, "Temp: %.2f C", temperature);
+    sprintf(humidity_str, "Humidity: %.2f%%", humidity);
+
+    // Виведення на LCD
+    LCD_Clear();
+    LCD_SetCursor(0, 0);
+    LCD_Print(temperature_str);
+    LCD_SetCursor(1, 0);
+    LCD_Print(humidity_str);
+}
+
+/* Решта коду залишається незмінною */
+
+int main(void) {
+    /* Решта коду залишається незмінною */
+    // ...
+    
+    // Ініціалізація бібліотеки LCD
+    LCD_Init();
+
+    // Ініціалізація об'єкта DHT
+    dht.begin();
+
+    // Додайте завдання для виводу на LCD
+    SetTask(output_LCD);
+
+    /* Решта коду залишається незмінною */
+    // ...
+}
